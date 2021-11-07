@@ -9,112 +9,89 @@ namespace WinFormsApp.AdditionalForms
     public partial class TablesDifferenceForm : Form
     {
         private readonly DatabaseStateHolder _databaseStateHolder;
-                
-        private Database _currentDatabase1;
-        private Table _currentTable1;
-        private Database _currentDatabase2;
-        private Table _currentTable2;
-                
-        public TablesDifferenceForm()
+        private readonly TablesDifferenceRepository _tablesDifferenceRepository;
+
+        private string _currentDatabase1Name;
+        private string _currentTable1Name;
+        private string _currentDatabase2Name;
+        private string _currentTable2Name;
+
+        public TablesDifferenceForm(DatabaseStateHolder databaseStateHolder)
         {
             InitializeComponent();
+            _databaseStateHolder = databaseStateHolder;
+            _tablesDifferenceRepository = new TablesDifferenceRepository(databaseStateHolder);
         }
 
         private void showButton_Click(object sender, EventArgs e)
         {
-            throw new System.NotImplementedException();
+            FillDataGridView();
         }
 
         private void TablesDifferenceForm_Load(object sender, EventArgs e)
         {
-            BindDatabase1ComboBox();
-            BindDatabase2ComboBox();
+            BindDatabasesComboBoxes();
         }
 
         private void database1ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _currentDatabase1 = (Database) database1ComboBox.SelectedItem;
-            table1ComboBox.DataSource = _currentDatabase1.Tables;
-            table1ComboBox.DisplayMember = "Name";
+            _currentDatabase1Name = database1ComboBox.SelectedItem.ToString();
+            table1ComboBox.DataSource = _databaseStateHolder.GetAllDatabaseTablesNames(_currentDatabase1Name);
         }
+
         private void database2ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _currentDatabase2 = (Database) database2ComboBox.SelectedItem;
-            table2ComboBox.DataSource = _currentDatabase2.Tables;
-            table2ComboBox.DisplayMember = "Name";
+            _currentDatabase2Name = database2ComboBox.SelectedItem.ToString();
+            table2ComboBox.DataSource = _databaseStateHolder.GetAllDatabaseTablesNames(_currentDatabase2Name);
         }
 
-        public void BindDatabase1ComboBox()
+        private void BindDatabasesComboBoxes()
         {
-            database1ComboBox.DataSource = null;
-            database1ComboBox.Items.Clear();
-
-            database1ComboBox.DataSource = _databaseStateHolder.DatabasesList;
-            database1ComboBox.DisplayMember = "Name";
+            database1ComboBox.DataSource = _databaseStateHolder.GetAllDatabasesNames();
+            database2ComboBox.DataSource = _databaseStateHolder.GetAllDatabasesNames();
         }
 
         private void table1ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             //tableDiffDataGridView.Columns.Clear();
-            _currentTable1 = (Table) table1ComboBox.SelectedItem;
+            _currentTable1Name = table1ComboBox.SelectedItem.ToString();
             //if (_currentTable1.Columns.Count == 0) return;
 
             //FillDataGridView();
-        }
-        public void BindDatabase2ComboBox()
-        {
-            database2ComboBox.DataSource = null;
-            database2ComboBox.Items.Clear();
-
-            database2ComboBox.DataSource = _databaseStateHolder.DatabasesList;
-            database2ComboBox.DisplayMember = "Name";
         }
 
         private void table2ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             //tableDiffDataGridView.Columns.Clear();
-            _currentTable2 = (Table) table2ComboBox.SelectedItem;
+            _currentTable2Name = table2ComboBox.SelectedItem.ToString();
             //if (_currentTable2.Columns.Count == 0) return;
 
             //FillDataGridView();
         }
 
-        // public void FillDataGridView()
-        // {
-        //
-        //     foreach (var column in _currentTable1.Columns)
-        //     {
-        //         tableDiffDataGridView.Columns.Add(column.Name, column.Name);
-        //     }
-        //
-        //     AddRows();
-        //
-        //     for (int i = 0; i < _currentTable1.Columns.Count; i++)
-        //     {
-        //         for (int j = 0; j < _currentTable1.Columns[i].Values.Count; j++)
-        //         {
-        //
-        //             tableDiffDataGridView.Rows[j].Cells[i].Value = _currentTable1.Columns[i].Values[j];
-        //
-        //         }
-        //     }
-        // }
-        // private void AddRows()
-        // {
-        //     int count = _currentTable.Columns.Select(column => column.Values.Count).Max();
-        //     foreach (var column in _currentTable.Columns)
-        //     {
-        //         if (column.Values.Count < count)
-        //         {
-        //             for (int i = column.Values.Count; i < count; i++)
-        //             {
-        //                 column.Values.Add(string.Empty);
-        //             }
-        //         }
-        //     }
-        //
-        //     dataGridView1.Rows.Add(count);
-        //     
-        // }
+        private void FillDataGridView()
+        {
+            var table1 = _databaseStateHolder.FindTableByName(_currentDatabase1Name, _currentTable1Name);
+            var table2 = _databaseStateHolder.FindTableByName(_currentDatabase2Name, _currentTable2Name);
+            
+            var similarColNames = _tablesDifferenceRepository.FindSimilarColumnNames(table1, table2);
+            var table = _tablesDifferenceRepository.FindTablesDifference(table1, table2);
+
+
+            foreach (var colName in similarColNames)
+            {
+                tableDiffDataGridView.Columns.Add(colName, colName);
+            }
+
+            for (int rowIndex = 0; rowIndex < table.Count; rowIndex++)
+            {
+                tableDiffDataGridView.Rows.Add();
+                for (int columnIndex = 0; columnIndex < table[rowIndex].Count; columnIndex++)
+                {
+                    tableDiffDataGridView.Rows[rowIndex].Cells[columnIndex].Value = table[rowIndex][columnIndex];
+                }
+            }
+
+        }
     }
 }

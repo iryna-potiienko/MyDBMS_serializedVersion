@@ -35,7 +35,7 @@ namespace WinFormsApp.AdditionalForms
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.typeTextBox = new System.Windows.Forms.TextBox();
+            this.typeComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -48,9 +48,9 @@ namespace WinFormsApp.AdditionalForms
             // 
             // nameTextBox
             // 
-            this.nameTextBox.Location = new System.Drawing.Point(202, 43);
+            this.nameTextBox.Location = new System.Drawing.Point(179, 43);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(80, 20);
+            this.nameTextBox.Size = new System.Drawing.Size(110, 20);
             this.nameTextBox.TabIndex = 1;
             // 
             // okButton
@@ -71,19 +71,21 @@ namespace WinFormsApp.AdditionalForms
             this.label2.TabIndex = 3;
             this.label2.Text = "Column Type";
             // 
-            // typeTextBox
+            // typeComboBox
             // 
-            this.typeTextBox.Location = new System.Drawing.Point(202, 73);
-            this.typeTextBox.Name = "typeTextBox";
-            this.typeTextBox.Size = new System.Drawing.Size(78, 20);
-            this.typeTextBox.TabIndex = 4;
+            this.typeComboBox.FormattingEnabled = true;
+            this.typeComboBox.Location = new System.Drawing.Point(179, 76);
+            this.typeComboBox.Name = "typeComboBox";
+            this.typeComboBox.Size = new System.Drawing.Size(110, 21);
+            this.typeComboBox.TabIndex = 5;
+            this.typeComboBox.SelectedIndexChanged += new System.EventHandler(this.typeComboBox_SelectedIndexChanged);
             // 
             // AddNewColumnForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.typeTextBox);
+            this.Controls.Add(this.typeComboBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.nameTextBox);
@@ -94,8 +96,11 @@ namespace WinFormsApp.AdditionalForms
             this.PerformLayout();
         }
 
+        private System.Windows.Forms.ComboBox typeComboBox;
+
+        private System.Windows.Forms.ComboBox comboBox;
+
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox typeTextBox;
 
         private System.Windows.Forms.TextBox nameTextBox;
 

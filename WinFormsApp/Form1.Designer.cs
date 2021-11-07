@@ -36,8 +36,7 @@ namespace WinFormsApp
             this.DatabaseLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseCombobox = new System.Windows.Forms.ComboBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -93,30 +92,26 @@ namespace WinFormsApp
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolStripMenuItem1, this.getToolStripMenuItem});
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {this.saveToolStripMenuItem, this.getToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // toolStripMenuItem1
+            // saveToolStripMenuItem
             // 
-            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.toolStripSeparator1});
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(43, 20);
-            this.toolStripMenuItem1.Text = "Save";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(57, 6);
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // getToolStripMenuItem
             // 
             this.getToolStripMenuItem.Name = "getToolStripMenuItem";
             this.getToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.getToolStripMenuItem.Text = "Get";
+            this.getToolStripMenuItem.Click += new System.EventHandler(this.getToolStripMenuItem_Click);
             // 
             // databaseCombobox
             // 
@@ -298,11 +293,7 @@ namespace WinFormsApp
         private System.Windows.Forms.Button removeTableButton;
 
         private System.Windows.Forms.ToolStripMenuItem getToolStripMenuItem;
-
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
 
         private System.Windows.Forms.Label DatabaseLabel;

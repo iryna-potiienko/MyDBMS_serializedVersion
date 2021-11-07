@@ -102,10 +102,21 @@ namespace WinFormsApp
 
         private void dataGridView1_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
         {
+            dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "";
             var currentCellData = e.Value.ToString();//dataGridView1[e.ColumnIndex, e.RowIndex].Value;
 
-            _databaseStateHolder.AddDataToColumn(_currentDatabaseName, _currentTableName, currentCellData,
-                e.ColumnIndex, e.RowIndex);
+            //_validateRepository.Validate(currentCellData)
+
+            if (!_databaseStateHolder.AddDataToColumn(_currentDatabaseName, _currentTableName, currentCellData,
+                e.ColumnIndex, e.RowIndex))
+            {
+                //errorProvider1.SetError(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex]
+                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "Incorrect Type";
+                MessageBox.Show(@"Please input value of correct type!", @"Incorrect type!");
+                //dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "";
+                //e.Value = "";
+            }
+                
             // var table = _databaseStateHolder.FindTableByName(_currentDatabaseName, _currentTableName);
             // var colValues = table.Columns[e.ColumnIndex].Values;
             // if (e.RowIndex > colValues.Count-1)
@@ -138,7 +149,7 @@ namespace WinFormsApp
                 
             //var column = new Column {Name = colName, Type = frm.Type};
             //table.Columns.Add(column);
-            _databaseStateHolder.AddColumn(_currentDatabaseName, _currentTableName, colName, frm.Type);
+            _databaseStateHolder.AddColumn(_currentDatabaseName, _currentTableName, colName, frm.ColumnType);
                 
             frm.Dispose();
         }
@@ -277,7 +288,7 @@ namespace WinFormsApp
 
         private void tablesDifferenceButton_Click(object sender, EventArgs e)
         {
-            var removeColumnForm = new TablesDifferenceForm();
+            var removeColumnForm = new TablesDifferenceForm(_databaseStateHolder);
             removeColumnForm.Show();
             removeColumnForm.VisibleChanged += TablesDifferenceVisibleChanged;
         }
@@ -295,6 +306,19 @@ namespace WinFormsApp
 
             //databaseCombobox.SelectedItem = table;
             frm.Dispose();
+        }
+
+        
+        private void getToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _databaseStateHolder.GetDatabase();
+            BindComboBox();
+            //databaseCombobox.SelectedItem=
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _databaseStateHolder.SaveDatabase(_currentDatabaseName);
         }
     }
 }
